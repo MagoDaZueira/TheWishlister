@@ -1,6 +1,8 @@
 from API.TelegramAPI import TelegramAPI
+from dotenv import load_dotenv
 
 def main():
+    load_dotenv() #Só pra garantir...
     telebot = TelegramAPI()
     
     telebot.start()
