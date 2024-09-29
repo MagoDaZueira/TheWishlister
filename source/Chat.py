@@ -1,5 +1,5 @@
-import pandas as pd
-
+import WishlistManager as wm
+from Metacritic import retrieve_info
 
 class Chat:
     def __init__(self, chat_id, userName):
@@ -8,11 +8,10 @@ class Chat:
         global usersDataBase
 
 
-#TODO: Add os outros comandos e funcionalidades do bot
 class StandardAnswers():
     _COMANDOS = {
-        "/add": "Adiciona um jogo na sua Wishlist.",
-        "/review": "Gera um resumo de todas as Reviews disponíveis no MetaCritic do jogo.",
+        "/add": "Adiciona um jogo na sua wishlist.",
+        "/review": "Gera um resumo das informações disponíveis no Metacritic do jogo.",
         "/remove": "Remove um jogo da wishlist.",
         "/removeAll": "Remove todos os jogos da wishlist.",
         "/list": "List todos os jogos da wishlist."
@@ -22,31 +21,33 @@ class StandardAnswers():
     def ListCommands():
         answer = ""
         for key in StandardAnswers._COMANDOS.keys():
-            answer += f"/{key}:\n{StandardAnswers._COMANDOS[key]}\n\n"
+            answer += f"{key}:\n{StandardAnswers._COMANDOS[key]}\n\n"
         return answer
-    
-    #TODO: Terminar a parte de listagem de todos os jogos, mas pra isso, precisa definir como eles serão guardados.
-    @staticmethod
-    def ListGames():
-        answer = ""
 
 
-#TODO: Implementar os comandos do bot aqui.
+#TODO: Comando VerReviews, depende da parte do Arthur.
 class BotCommands():
     @staticmethod
-    def AddJogo():
-        pass
+    def AddJogo(gameName):
+        info = retrieve_info(gameName)
+        if info:
+            return 1
+        return 0
 
+    @staticmethod
     def RemoverJogo(gameName):
-        pass
+        wm.delete_from_wishlist(wm.wishlist_file, gameName)
 
+    @staticmethod
     def RemoverTudo():
-        pass
+        wm.delete_all(wm.wishlist_file)
 
-    def ResumirReview(gameName):
+    @staticmethod
+    def VerReviews(gameName):
         pass
 
     @staticmethod
-    def VerReviews():
-        pass
-
+    def ListarJogos():
+        answer = f'Aqui estão os jogos da sua wishlist:\n\n'
+        answer += wm.list_all(wm.wishlist_file)
+        return answer

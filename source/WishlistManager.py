@@ -1,6 +1,7 @@
 from datetime import datetime
-import csv
 import shelve
+
+wishlist_file = "Wishlist"
 
 
 def date_passed(date: dict) -> bool:
@@ -68,3 +69,20 @@ def delete_all(file_name: str) -> None:
     with shelve.open(file_name) as db:
         for key in db:
             delete_from_wishlist(file_name, key)
+
+
+def list_all(file_name: str) -> str:
+    """
+    Lists all the games in a wishlist shelve file.
+    
+    - file_name: the shelve file to clear (without .db at the end, only the prefix)
+    
+    Returns a string, with all the games and their respective dates.
+    """
+    answer = ""
+
+    with shelve.open(file_name) as db:
+        for key in db:
+            answer += f'{key} -- {db[key]}\n'
+    
+    return answer
