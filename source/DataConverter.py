@@ -11,9 +11,12 @@ def name_prepare(name: str) -> str:
 
 
 def date_prepare(date):
-    month_str, day_str, year_str = date.replace(",", "").split()
+    if (date != 'TBD'):
+        month_str, day_str, year_str = date.replace(",", "").split()
 
-    month_num = month_map[month_str]
+        month_num = month_map[month_str]
 
-    date_dict = {"Year": int(year_str), "Month": month_num, "Day": int(day_str)}
-    return date_dict
+        date_dict = {"Year": int(year_str), "Month": month_num, "Day": int(day_str)}
+        return date_dict
+    else: 
+        return 'TBD'

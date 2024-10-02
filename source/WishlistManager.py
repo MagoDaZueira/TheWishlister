@@ -13,14 +13,16 @@ def date_passed(date: dict) -> bool:
     And returns a bool, indicating whether
     we're equal/beyond that date
     """
+    if (date != 'TBD'):
+        current_date = datetime.now()
+        target_date = datetime(date["Year"], date["Month"], date["Day"])
 
-    current_date = datetime.now()
-    target_date = datetime(date["Year"], date["Month"], date["Day"])
-
-    if target_date > current_date:
+        if target_date > current_date:
+            return False
+        
+        return True
+    else:
         return False
-    
-    return True
 
 
 

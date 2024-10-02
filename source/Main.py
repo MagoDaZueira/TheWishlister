@@ -1,8 +1,10 @@
 from API.TelegramAPI import TelegramAPI
 from dotenv import load_dotenv
+from Scheduler import read_from_wishlist
 
 def main():
     load_dotenv() #Só pra garantir...
+    read_from_wishlist("Wishlist")
     telebot = TelegramAPI()
     
     telebot.start()
