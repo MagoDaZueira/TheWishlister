@@ -11,23 +11,37 @@ def maritalk_review(game_name):
         return_text = "O jogo não existe, ainda não foi lançado, ou houve um possível erro de digitação"
         return return_text
     
-
+    reviews = game_info["Reviews"]
     reviews_text = ""
+    
+    amount = min(len(reviews), 4)
 
-    amount = min(len(game_info["Reviews"]), 4)
+    i = 0
+    j = len(reviews)-1
 
-    for i in range(amount): 
-        current_review = ["------ Review " + str(i+1) + " ------\n\n"
-            "Crítico: " + game_info["Reviews"][i]["Name"] + "\n\n"
-            "Pontuação: " + game_info["Reviews"][i]["Score"] + "\n\n"
-            "" + game_info["Reviews"][i]["Summary"] + "\n\n"
-            "Link: " + game_info["Reviews"][i]["Link"] + "\n\n"]
+    chosen_reviews = []
+    for k in range(amount):
+        if k % 2 == 0:
+            chosen_reviews.append(reviews[i])
+            i += 1
+        else:
+            chosen_reviews.append(reviews[j])
+            j -= 1
+
+    i = 1
+    for rev in chosen_reviews: 
+        current_review = ["------ Review " + str(i) + " ------\n\n"
+            "Crítico: " + rev["Name"] + "\n\n"
+            "Pontuação: " + rev["Score"] + "\n\n"
+            "" + rev["Summary"] + "\n\n"
+            "Link: " + rev["Link"] + "\n\n"]
         reviews_text += current_review[0]
+        i += 1
 
     modelo = { 'Dados':
          "Nome do jogo: " + game_info['Name'] + "\n"
 
-         "Data de lançamento: " + "Dia " + str(game_info['Date']['Day']) + "/" + str(game_info['Date']['Month']) + "/" + str(game_info['Date']['Year']) + "\n"
+         "Data de lançamento: " + str(game_info['Date']['Day']) + "/" + str(game_info['Date']['Month']) + "/" + str(game_info['Date']['Year']) + "\n"
 
          "Nota no Metacritic: " + game_info['Score'] + "\n\n"
 
@@ -48,9 +62,6 @@ def maritalk_review(game_name):
     response = model.generate(prompt["Dados"], max_tokens=1000)
     answer = response["answer"]
 
-    return_text = modelo["Dados"] + "-------------------\n\n" + answer
+    message_list = [modelo["Dados"], answer]
 
-    return return_text
-
-
-# print(maritalk_review("Hollow Knight"))  
+    return message_list

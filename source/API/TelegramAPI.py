@@ -8,12 +8,12 @@ from Chat import Chat, StandardAnswers, BotCommands
 class TelegramAPI:
 
     def __init__(self):
-        self.bot = telebot.TeleBot(Keys.getTelegramKey()) # F keys...
+        self.bot = telebot.TeleBot(Keys.getTelegramKey())
         self.set_handlers()
 
     def set_handlers(self):
         @self.bot.message_handler(commands=["start"])
-        def bem_vindo(message): #Isso aqui não é uma cópia direta do JP, confia.
+        def bem_vindo(message):
             novo_chat = Chat(message.chat.id, message.chat.username)
 
             self.bot.reply_to(
@@ -83,12 +83,14 @@ class TelegramAPI:
                 return
 
             try:
-                game_name = message.text.split(" ", 1)[1]  # Split by space and get the second part (game name)
+                game_name = message.text.split(" ", 1)[1]
+                self.bot.reply_to(message, f'Aqui está o que você precisa saber sobre {game_name}:')
                 resposta = BotCommands.VerReviews(game_name)
-                self.bot.reply_to(message, resposta)
+                self.bot.reply_to(message, resposta[0])
+                self.bot.reply_to(message, resposta[1])
 
             except IndexError:
-                self.bot.reply_to(message, "Por favor, insira o nome do jogo após o comando /remove.")
+                self.bot.reply_to(message, "Por favor, insira o nome do jogo após o comando /review.")
 
 
     def check_initialized(self, message):
