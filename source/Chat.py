@@ -1,5 +1,6 @@
 import WishlistManager as wm
 from Metacritic import retrieve_info
+from Maritaca import maritalk_review
 
 class Chat:
     def __init__(self, chat_id, userName):
@@ -44,7 +45,7 @@ class BotCommands():
 
     @staticmethod
     def VerReviews(gameName):
-        pass
+        return maritalk_review(gameName)
 
     @staticmethod
     def ListarJogos():

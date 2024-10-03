@@ -1,7 +1,7 @@
 from datetime import datetime
 import shelve
 
-wishlist_file = "Wishlist"
+wishlist_file = "./Wishlist"
 
 
 def date_passed(date: dict) -> bool:

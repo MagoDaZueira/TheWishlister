@@ -69,14 +69,6 @@ class TelegramAPI:
             self.bot.reply_to(message, f"Removendo todos os jogos da sua wishlist.")
             BotCommands.RemoverTudo()
 
-        @self.bot.message_handler(commands=["removeAll"])    
-        def remover_tudo(message):
-            if not self.check_initialized(message):
-                return
-
-            self.bot.reply_to(message, f"Removendo todos os jogos da sua wishlist.")
-            BotCommands.RemoverTudo()
-
         @self.bot.message_handler(commands=["list"])    
         def listar_jogos(message):
             if not self.check_initialized(message):
@@ -84,6 +76,19 @@ class TelegramAPI:
 
             listagem = BotCommands.ListarJogos()
             self.bot.reply_to(message, listagem)
+
+        @self.bot.message_handler(commands=["review"])    
+        def ver_reviews(message):
+            if not self.check_initialized(message):
+                return
+
+            try:
+                game_name = message.text.split(" ", 1)[1]  # Split by space and get the second part (game name)
+                resposta = BotCommands.VerReviews(game_name)
+                self.bot.reply_to(message, resposta)
+
+            except IndexError:
+                self.bot.reply_to(message, "Por favor, insira o nome do jogo após o comando /remove.")
 
 
     def check_initialized(self, message):

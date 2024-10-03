@@ -1,9 +1,7 @@
 import maritalk
-import os
 from dotenv import load_dotenv
 import Metacritic
-from WishlistManager import date_passed
-
+from API.Keys import Keys
 
 
 def maritalk_review(game_name):
@@ -16,12 +14,14 @@ def maritalk_review(game_name):
 
     reviews_text = ""
 
-    for i in range(len(game_info["Reviews"])): 
-        current_review = ["Review " + str(i+1) + ":" + "\n\n"
-            "   Nome do crítico: " + game_info["Reviews"][i]["Name"] + "\n\n"
-            "   Pontuação dada: " + game_info["Reviews"][i]["Score"] + "\n\n"
-            "   Resumo da review: " + game_info["Reviews"][i]["Summary"] + "\n\n"
-            "   Link para a review: " + game_info["Reviews"][i]["Link"] + "\n\n"]
+    amount = min(len(game_info["Reviews"]), 4)
+
+    for i in range(amount): 
+        current_review = ["------ Review " + str(i+1) + " ------\n\n"
+            "Crítico: " + game_info["Reviews"][i]["Name"] + "\n\n"
+            "Pontuação: " + game_info["Reviews"][i]["Score"] + "\n\n"
+            "" + game_info["Reviews"][i]["Summary"] + "\n\n"
+            "Link: " + game_info["Reviews"][i]["Link"] + "\n\n"]
         reviews_text += current_review[0]
 
     modelo = { 'Dados':
@@ -41,16 +41,16 @@ def maritalk_review(game_name):
         }
     
     model = maritalk.MariTalk(
-        key= os.getenv('MARITACA_API_KEY'), #Cole a chave aqui Ex: '100088...'
-        model="sabia-3"  # No momento, suportamos os modelos sabia-3, sabia-2-medium e sabia-2-small
+        key= Keys.getMaritacaKey(),
+        model="sabia-3"
     )
 
     response = model.generate(prompt["Dados"], max_tokens=1000)
     answer = response["answer"]
 
-    return_text = modelo["Dados"] + answer
+    return_text = modelo["Dados"] + "-------------------\n\n" + answer
 
     return return_text
 
 
-print(maritalk_review("Hollow Knight"))  
+# print(maritalk_review("Hollow Knight"))  
